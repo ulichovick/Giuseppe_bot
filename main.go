@@ -57,13 +57,13 @@ func getUpdates(updates tgbotapi.UpdatesChannel, bot *tgbotapi.BotAPI) {
 		if update.Message != nil {
 			log.Printf("%s escribio %s", update.Message.From.FirstName, update.Message.Text)
 			/* msg := tgbotapi.NewMessage(update.Message.Chat.ID, update.Message.Text) */
-			cmd := exec.Command("python", "test_py/test.py", "-w", string(update.Message.Text))
+			cmd := exec.Command("python3", "llama.py", "-w", string(update.Message.Text))
 			out, err := cmd.Output()
 			if err != nil {
 				log.Println(err)
 			}
-			text := "Definition: " + string(out)
-			//log.Println(out)
+			text := string(out)
+			log.Println(out)
 			msg := tgbotapi.NewMessage(update.Message.Chat.ID, text)
 			msg.ReplyToMessageID = update.Message.MessageID
 			bot.Send(msg)
