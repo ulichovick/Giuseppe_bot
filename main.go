@@ -56,6 +56,9 @@ func getUpdates(updates tgbotapi.UpdatesChannel, bot *tgbotapi.BotAPI) {
 	for update := range updates {
 		if update.Message != nil {
 			log.Printf("%s escribio %s", update.Message.From.FirstName, update.Message.Text)
+			msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Give me a second please, im generating ypur answer")
+			msg.ReplyToMessageID = update.Message.MessageID
+			bot.Send(msg)
 			/* msg := tgbotapi.NewMessage(update.Message.Chat.ID, update.Message.Text) */
 			cmd := exec.Command("python3", "llama.py", "-w", string(update.Message.Text))
 			out, err := cmd.Output()
@@ -64,9 +67,9 @@ func getUpdates(updates tgbotapi.UpdatesChannel, bot *tgbotapi.BotAPI) {
 			}
 			text := string(out)
 			log.Println(out)
-			msg := tgbotapi.NewMessage(update.Message.Chat.ID, text)
-			msg.ReplyToMessageID = update.Message.MessageID
-			bot.Send(msg)
+			msg_ans := tgbotapi.NewMessage(update.Message.Chat.ID, text)
+			msg_ans.ReplyToMessageID = update.Message.MessageID
+			bot.Send(msg_ans)
 		}
 	}
 }
